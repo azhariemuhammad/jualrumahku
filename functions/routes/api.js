@@ -1,14 +1,34 @@
 const express = require('express')
 const router = express.Router()
-const { addDataUser, getAllUsers, getUserByEmail, deleteUser } = require('../controller/userCtrl')
+const { createUser,
+  getAllUsers,
+  findByIdUser,
+  findByIdAndRemove } = require('../controller/userCtrl')
+const { createHouse,
+  getAllHouses,
+  findByIdHouse,
+  findByIdAndRemoveHouse,
+  findByIdAndUpdate } = require('../controller/houseCtrl')
 
 
-router.post('/users', addDataUser)
+router.post('/users', createUser)
 
 router.get('/users', getAllUsers)
 
-router.get('/users/:email', getUserByEmail)
+router.get('/users/:id', findByIdUser)
 
-router.delete('/users', deleteUser)
+router.delete('/users', findByIdAndRemove)
+
+router.post('/houses', createHouse)
+
+router.get('/houses', getAllHouses)
+
+router.get('/houses/:id', findByIdHouse)
+
+router.put('/houses/:id', findByIdAndUpdate)
+
+router.get('/house/:id', findByIdAndRemoveHouse)
+
+
 
 module.exports = router
