@@ -1,5 +1,5 @@
 const User = require('../models/user-schema')
-const findOrCreate = require('mongoose-find-or-create')
+const findOrCreate = require('mongoose-findorcreate')
 
 let message = ''
 
