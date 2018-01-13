@@ -6,14 +6,15 @@ import router from './router'
 import '../node_modules/material-design-lite/material.min.css'
 import '../node_modules/material-design-lite/material.min.js'
 import VModal from 'vue-js-modal'
-
+import store from './vuex/store'
 Vue.use(VModal)
 Vue.config.productionTip = false
+/* eslint-disable */
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })
