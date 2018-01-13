@@ -4,12 +4,15 @@
       <header class="mdl-layout__header">
         <div class="mdl-layout__header-row">
           <!-- Title -->
+          <router-link :to="{path: '/'}">
           <span class="mdl-layout-title">Jual-Rumahku</span>
+          </router-link>
           <!-- Add spacer, to align navigation to the right -->
           <div class="mdl-layout-spacer"></div>
           <!-- Navigation. We hide it in small screens. -->
           <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link" href="">Link</a>
+            <router-link :to="{path: '/admin'}"><a class="mdl-navigation__link" href="">Admin</a>
+            </router-link>
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a>
             <button class="mdl-button mdl-js-button mdl-button--raised" @click="show">

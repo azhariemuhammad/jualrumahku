@@ -7,6 +7,9 @@ import '../node_modules/material-design-lite/material.min.css'
 import '../node_modules/material-design-lite/material.min.js'
 import VModal from 'vue-js-modal'
 import store from './vuex/store'
+import ReadMore from 'vue-read-more'
+
+Vue.use(ReadMore)
 Vue.use(VModal)
 Vue.config.productionTip = false
 /* eslint-disable */

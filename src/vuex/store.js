@@ -9,13 +9,20 @@ const http = axios.create({
 })
 const state = {
   username: '',
-  email: ''
+  email: '',
+  houses: []
 }
 
 const mutations = {
   saveUser: function (state, payload) {
     state.username = payload.username
     state.email = payload.email
+    localStorage.setItem('uid', payload._id)
+    localStorage.setItem('email', payload.email)
+    localStorage.setItem('username', payload.username)
+  },
+  setData: function (state, payload) {
+    state.houses = payload
   }
 }
 
@@ -37,6 +44,7 @@ const actions = {
     http.get('houses')
       .then(({data}) => {
         console.log('house', data)
+        commit('setData', data)
       })
       .catch(err => console.log(err))
   },
@@ -45,7 +53,7 @@ const actions = {
     http.post('houses', {
       title: payload.title,
       desc: payload.desc,
-      photoDenah: payload.photoDenah,
+      photoDenah: payload.downloadURL,
       price: payload.price
     })
       .then(({data}) => {

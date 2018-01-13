@@ -15,18 +15,25 @@
         <vue-editor v-model="post.desc"></vue-editor>
       <input type="submit">
     </form>
+  
+  <ListPost/>
   </div>
+  
+  
+  
+
 
 </template>
 
 <script>
 import firebaseStorage from '../firebase.js'
+import ListPost from '@/components/ListPost'
 import firebase from 'firebase'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 import randomWord from 'get-unique-name'
 export default {
-  components: { VueEditor },
+  components: { VueEditor, ListPost },
   name: 'Admin',
   data () {
     return {
@@ -39,6 +46,11 @@ export default {
       },
       htmlForEditor: null
     }
+  },
+  computed: {
+    ...mapState([
+      'houses'
+    ])
   },
   methods: {
     ...mapActions([
@@ -79,6 +91,7 @@ export default {
         console.log('success')
         vm.post.downloadURL = uploadTask.snapshot.downloadURL
         vm.postHouse(vm.post)
+        vm.post = {}
       })
     }
   }
