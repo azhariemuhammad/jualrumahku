@@ -5,6 +5,8 @@ let message = ''
 const createHouse = (req, res) => {
   House.create(req.body)
   .then(data => {
+    data.populate('userId')
+    .execPopulate()
     res.json(data)
   })
   .catch(err => {
@@ -14,6 +16,7 @@ const createHouse = (req, res) => {
 
 const getAllHouses = (req, res) => {
   House.find()
+    .populate('userId')
     .then(house => {
       res.status(200).send(house)
     })
@@ -24,6 +27,18 @@ const getAllHouses = (req, res) => {
 
 const findByIdHouse = (req, res) => {
   House.find({ _id: req.params.id })
+  .populate('userId')
+  .then(house => {
+    res.status(200).send(house)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+
+const findHouse = (req, res) => {
+  House.find({userId: req.params.uid})
+  .populate('userid')
   .then(house => {
     res.status(200).send(house)
   })
@@ -36,6 +51,7 @@ const findByIdAndUpdate = (req, res) => {
   House.findByIdAndUpdate({_id: req.params.id},{
     title: req.body.title,
     desc: req.body.desc,
+    userId: req.body.userId,
     photoDenah: req.body.photoDenah,
     price: req.body.price,
     lat: req.body.lat,
@@ -44,6 +60,8 @@ const findByIdAndUpdate = (req, res) => {
 
   }, {new: true})
   .then(data => {
+    data.populate('userId')
+    .execPopulate()
     res.json(data)
   })
   .catch(err => {
@@ -68,6 +86,7 @@ module.exports = {
   createHouse,
   getAllHouses,
   findByIdHouse,
+  findHouse,
   findByIdAndUpdate,
   findByIdAndRemoveHouse
 }

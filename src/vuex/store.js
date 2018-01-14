@@ -11,21 +11,31 @@ const state = {
   username: localStorage.getItem('username'),
   email: localStorage.getItem('email'),
   houses: [],
-  editItem: []
+  editItem: [],
+  housesBaseUid: []
 }
 
 const mutations = {
   saveUser: function (state, payload) {
-    localStorage.setItem('uid', payload._id)
+    localStorage.setItem('uidRumah', payload._id)
     localStorage.setItem('email', payload.email)
     localStorage.setItem('username', payload.username)
     alert('succes login')
+  },
+  removeUser: function (state, payload) {
+    localStorage.removeItem('uidRumah')
+    localStorage.removeItem('email')
+    localStorage.removeItem('username')
   },
   setData: function (state, payload) {
     state.houses = payload
   },
   setNewData: function (state, payload) {
     state.houses.push(payload)
+    alert('succes create data')
+  },
+  setDataBasedUid: function (state, payload) {
+    state.housesBaseUid = payload
   },
   updateStateHouse: function (state, payload) {
     console.log(payload)
@@ -40,7 +50,7 @@ const mutations = {
     state.editItem = payload
   },
   remove: function (state, payload) {
-    let index = state.houses.findIndex(x => {
+    let index = state.housesBaseUid.findIndex(x => {
       return x._id === payload._id
     })
     console.log(index)
@@ -60,6 +70,9 @@ const actions = {
       })
       .catch(err => console.log(err))
   },
+  signout: ({commit}, payload) => {
+    commit('removeUser')
+  },
   getDataHouses: ({commit}, payload) => {
     console.log('eee')
     http.get('houses')
@@ -73,6 +86,7 @@ const actions = {
     console.log('payload: ', payload)
     http.post('houses', {
       title: payload.title,
+      userId: localStorage.getItem('uidRumah'),
       desc: payload.desc,
       photoDenah: payload.downloadURL,
       lat: payload.lat,
@@ -112,6 +126,15 @@ const actions = {
       .then(({data}) => {
         console.log(data)
         commit('updateStateHouse', data)
+      })
+      .catch(err => console.log(err))
+  },
+  findHouseByUid: ({commit}, payload) => {
+    console.log('haaofoawefoi')
+    http.get(`houses/user/${localStorage.getItem('uidRumah')}`)
+      .then(({data}) => {
+        console.log('data house: ', data)
+        commit('setDataBasedUid', data)
       })
       .catch(err => console.log(err))
   }

@@ -1,8 +1,7 @@
 <template>
-  <div>
+  <div class="content">
     <div v-if="editItem.length === 0">
       <h1>Post</h1>
-
      <gmap-map
     :center="center"
     :zoom="7"
@@ -18,8 +17,9 @@
     ></gmap-marker>
     </gmap-map>
 
-
+      <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" v-if="progressUpload"></div>
       <form action="#" @submit.prevent="submit">
+        
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" v-model="post.title" id="sample3">
         <label class="mdl-textfield__label" for="sample3">Title</label>
@@ -39,7 +39,7 @@
         </vue-google-autocomplete>
 
       <input type="file" @change="onfileChange">
-        <label class="mdl-textfield__label" for="sample2">Description</label>
+        <label class="mdl-textfield__label" for="sample2"></label>
         <vue-editor v-model="post.desc"></vue-editor>
       <input type="submit">
     </form>
@@ -125,7 +125,8 @@ export default {
         lng: null
       },
       htmlForEditor: null,
-      onUpdate: false
+      onUpdate: false,
+      progressUpload: false
     }
   },
   computed: {
@@ -142,7 +143,8 @@ export default {
     ...mapActions([
       'postHouse',
       'getDataHouses',
-      'updateHouse'
+      'updateHouse',
+      'findHouseByUid'
     ]),
     getAddressData: function (addressData, placeResultData, id) {
       console.log(id)
@@ -166,8 +168,10 @@ export default {
       if (params === true) {
         console.log('masuk paraa')
         this.onUpdate = true
+        this.progressUpload = !this.progressUpload
         this.upload()
       } else {
+        this.progressUpload = !this.progressUpload
         this.upload()
       }
     },
@@ -186,10 +190,12 @@ export default {
           downloadURL: this.post.downloadURL
         }
         this.updateHouse(obj)
+        this.progressUpload = !this.progressUpload
         this.post = {}
       } else {
         console.log('new post')
         this.postHouse(this.post)
+        this.progressUpload = !this.progressUpload
         this.post = {}
       }
     },
@@ -233,4 +239,9 @@ export default {
 form {
   width: 100%;
 }
+
+h1 {
+  color: black;
+}
+
 </style>

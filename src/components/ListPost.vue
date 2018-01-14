@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex-container">
-      <div v-for="(item, index) in houses"> 
+      <div v-for="(item, index) in housesBaseUid"> 
         <div class="demo-card-wide mdl-card mdl-shadow--2dp flex-item">
         <div class="mdl-card__title">
           <h2 class="mdl-card__title-text">grergsegse</h2>
@@ -38,13 +38,14 @@ export default {
   },
   computed: {
     ...mapState([
-      'houses'
+      'housesBaseUid'
     ])
   },
   methods: {
     ...mapActions([
       'editPost',
-      'deleteHouse'
+      'deleteHouse',
+      'findHouseByUid'
     ]),
     edit: function (item) {
       this.editPost(item)
@@ -53,7 +54,11 @@ export default {
       console.log('mo edit')
       this.deleteHouse(house)
     }
+  },
+  created () {
+    this.findHouseByUid()
   }
+
 }
 </script>
 

@@ -33,19 +33,35 @@
 
     <modal name="hello-world">
       <div id="card-modal">
-        <div class="mdl-card__title mdl-card--expand">
+        <div v-if="!isLogin">
+          <div class="mdl-card__title mdl-card--expand">
           <h2 class="mdl-card__title-text">Login</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              Discover the latest properties for rent across Indonesia. JualRumahku allows you to search for the latest properties to rent in your ideal suburb.
+            </div>
+            
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="loginGoogle">
+                Login with Google
+              </a>
+          </div>
         </div>
-        <div class="mdl-card__supporting-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Aenan convallis.
+        <div v-else>
+          <div class="mdl-card__title mdl-card--expand">
+          <h2 class="mdl-card__title-text">Hello, {{ username }}</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              Discover the latest properties for rent across Indonesia. JualRumahku allows you to search for the latest properties to rent in your ideal suburb.
+            </div>
+            
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="logout">
+                Logout
+              </a>
+          </div>
         </div>
         
-        <div class="mdl-card__actions mdl-card--border">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="loginGoogle">
-            Login with Google
-          </a>
-      </div>
       </div>
     </modal>
 </div>
@@ -60,6 +76,8 @@ export default {
   data () {
     return {
       provider1: '',
+      username: '',
+      isLogin: false,
       formLogin: {
         email: '',
         username: ''
@@ -68,7 +86,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'createUser'
+      'createUser',
+      'signout'
     ]),
     show () {
       this.$modal.show('hello-world')
@@ -88,6 +107,19 @@ export default {
       provider1.addScope('email')
       this.auth(provider1)
     },
+    logout: function () {
+      let vm = this
+      firebase.auth().signOut().then(function () {
+        vm.username = ''
+        vm.isLogin = ''
+        vm.signout()
+        vm.hide()
+        alert('logout')
+      }).catch(function (error) {
+        // An error happened.
+        console.log(error)
+      })
+    },
     auth: function (provider) {
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
@@ -99,9 +131,18 @@ export default {
           this.formLogin.uid = user.uid
           console.log('user: ', result.user)
           console.log(this.formLogin)
+          this.username = user.displayName
+          this.isLogin = true
           this.createUser(this.formLogin)
+          this.hide()
         })
         .catch(err => alert(err.message))
+    }
+  },
+  created () {
+    if (localStorage.getItem('uidRumah')) {
+      this.username = localStorage.getItem('username')
+      this.isLogin = true
     }
   }
 }
@@ -111,16 +152,10 @@ export default {
 .v--modal-box.v--modal {
   height: 375px !important;
 }
-/* demo-card-square.mdl-card {
-  width: 100%;
-  height: 100%;
-}
-.demo-card-square > .mdl-card__title {
-  color: #fff;
-  background:
-    url() bottom right 15% no-repeat #46B6AC;
-} */
 
+.mdl-card__supporting-text {
+  font-size: 18px;
+}
 * { box-sizing:border-box; }
 
 body {

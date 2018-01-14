@@ -8,6 +8,7 @@ const { createHouse,
   getAllHouses,
   findByIdHouse,
   findByIdAndRemoveHouse,
+  findHouse,
   findByIdAndUpdate } = require('../controller/houseCtrl')
 
 
@@ -24,6 +25,8 @@ router.post('/houses', createHouse)
 router.get('/houses', getAllHouses)
 
 router.get('/houses/:id', findByIdHouse)
+
+router.get('/houses/user/:uid', findHouse)
 
 router.put('/houses/:id', findByIdAndUpdate)
 

@@ -30,6 +30,14 @@ export default {
 body {
   margin: 0;
 }
+.mdl-layout__content {
+  background-image: url('./assets/bc.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+}
 
 
 </style>
