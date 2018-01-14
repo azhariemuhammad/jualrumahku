@@ -2,6 +2,23 @@
   <div>
     <div v-if="editItem.length === 0">
       <h1>Post</h1>
+
+     <gmap-map
+    :center="center"
+    :zoom="7"
+    style="width: 500px; height: 300px"
+  >
+  <gmap-marker
+      :key="index"
+      v-for="(m, index) in markers"
+      :position="m.position"
+      :clickable="true"
+      :draggable="true"
+      @click="center=m.position"
+    ></gmap-marker>
+    </gmap-map>
+
+
       <form action="#" @submit.prevent="submit">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" v-model="post.title" id="sample3">
@@ -11,15 +28,41 @@
         <input class="mdl-textfield__input" v-model="post.price" type="text" id="sample2">
         <label class="mdl-textfield__label" for="sample2">Price</label>
       </div>
+        <vue-google-autocomplete
+            id="map"
+            ref="address"
+            classname="form-control"
+            placeholder="Start typing"
+            v-on:placechanged="getAddressData"
+            country="id"
+        >
+        </vue-google-autocomplete>
+
       <input type="file" @change="onfileChange">
         <label class="mdl-textfield__label" for="sample2">Description</label>
         <vue-editor v-model="post.desc"></vue-editor>
       <input type="submit">
     </form>
+
     </div>
     
     <div v-else>
       <h1>Edit</h1>
+
+     <gmap-map
+    :center="center"
+    :zoom="7"
+    style="width: 500px; height: 300px"
+      >
+      <gmap-marker
+          :key="index"
+          v-for="(m, index) in markers"
+          :position="m.position"
+          :clickable="true"
+          :draggable="true"
+          @click="center=m.position"
+        ></gmap-marker>
+        </gmap-map>
       <form action="#" @submit.prevent="submit(true)">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" v-model="editItem.title" id="sample3">
@@ -29,6 +72,15 @@
         <input class="mdl-textfield__input" v-model="editItem.price" type="text" id="sample2">
         <label class="mdl-textfield__label" for="sample2">Price</label>
       </div>
+      <vue-google-autocomplete
+            id="map"
+            ref="address"
+            classname="form-control"
+            placeholder="Start typing"
+            v-on:placechanged="getAddressData"
+            country="id"
+        >
+        </vue-google-autocomplete>
       <input type="file" @change="onfileChange">
         <label class="mdl-textfield__label" for="sample2">Description</label>
         <vue-editor v-model="editItem.desc"></vue-editor>
@@ -46,6 +98,7 @@
 </template>
 
 <script>
+import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import firebaseStorage from '../firebase.js'
 import ListPost from '@/components/ListPost'
 import firebase from 'firebase'
@@ -53,16 +106,23 @@ import { mapActions, mapState } from 'vuex'
 import { VueEditor } from 'vue2-editor'
 import randomWord from 'get-unique-name'
 export default {
-  components: { VueEditor, ListPost },
+  components: { VueEditor, ListPost, VueGoogleAutocomplete },
   name: 'Admin',
   data () {
     return {
+      center: {lat: 10.0, lng: 10.0},
+      markers: [{
+        position: {lat: 10.0, lng: 10.0}
+      }],
       post: {
         title: '',
         price: '',
         desc: '',
         image: '',
-        downloadURL: ''
+        downloadURL: '',
+        address: '',
+        lat: null,
+        lng: null
       },
       htmlForEditor: null,
       onUpdate: false
@@ -73,12 +133,27 @@ export default {
       'editItem'
     ])
   },
+  mounted () {
+    // To demonstrate functionality of exposed component functions
+    // Here we make focus on the user input
+    this.$refs.address.focus()
+  },
   methods: {
     ...mapActions([
       'postHouse',
       'getDataHouses',
       'updateHouse'
     ]),
+    getAddressData: function (addressData, placeResultData, id) {
+      console.log(id)
+      this.post.address = addressData.route
+      this.post.lat = addressData.latitude
+      this.post.lng = addressData.longitude
+      this.center.lat = addressData.latitude
+      this.center.lng = addressData.longitude
+      this.markers[0].position.lat = addressData.latitude
+      this.markers[0].position.lng = addressData.longitude
+    },
     onfileChange: function (e) {
       var files = e.target.files || e.dataTransfer.files
       if (!files.length) {
@@ -105,9 +180,13 @@ export default {
           title: this.editItem.title,
           price: this.editItem.price,
           desc: this.editItem.desc,
+          address: this.post.address,
+          lat: this.post.lat,
+          lng: this.post.lng,
           downloadURL: this.post.downloadURL
         }
         this.updateHouse(obj)
+        this.post = {}
       } else {
         console.log('new post')
         this.postHouse(this.post)

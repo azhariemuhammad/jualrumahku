@@ -27,7 +27,7 @@ router.get('/houses/:id', findByIdHouse)
 
 router.put('/houses/:id', findByIdAndUpdate)
 
-router.get('/house/:id', findByIdAndRemoveHouse)
+router.delete('/house/:id', findByIdAndRemoveHouse)
 
 
 

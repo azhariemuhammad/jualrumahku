@@ -37,7 +37,11 @@ const findByIdAndUpdate = (req, res) => {
     title: req.body.title,
     desc: req.body.desc,
     photoDenah: req.body.photoDenah,
-    price: req.body.price
+    price: req.body.price,
+    lat: req.body.lat,
+    lng: req.body.lng,
+    address: req.body.address
+
   }, {new: true})
   .then(data => {
     res.json(data)

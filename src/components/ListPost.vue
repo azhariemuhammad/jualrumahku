@@ -14,7 +14,7 @@
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="edit(item)">
             Edit
           </a>
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="remove(item)">
             Remove
           </a>
         </div>
@@ -43,10 +43,15 @@ export default {
   },
   methods: {
     ...mapActions([
-      'editPost'
+      'editPost',
+      'deleteHouse'
     ]),
     edit: function (item) {
       this.editPost(item)
+    },
+    remove: function (house) {
+      console.log('mo edit')
+      this.deleteHouse(house)
     }
   }
 }

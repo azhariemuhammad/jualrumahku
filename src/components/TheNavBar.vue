@@ -32,42 +32,28 @@
       </div>
 
     <modal name="hello-world">
-      <!-- <div id="card-modal"> -->
-        <!-- <div class="mdl-card__title mdl-card--expand">
+      <div id="card-modal">
+        <div class="mdl-card__title mdl-card--expand">
           <h2 class="mdl-card__title-text">Login</h2>
         </div>
         <div class="mdl-card__supporting-text">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Aenan convallis.
-        </div> -->
+        </div>
         
-        <form @submit.prevent="login">
-          <h5>Login</h5>
-          <div class="group">
-            <input type="text" v-model="formLogin.username"><span class="highlight"></span><span class="bar"></span>
-            <label>Username</label>
-          </div>
-          <div class="group">
-            <input type="email" v-model="formLogin.email"><span class="highlight"></span><span class="bar"></span>
-            <label>Email</label>
-          </div>
-          <button type="button" class="button buttonBlue" @click="login">Subscribe
-            <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
-          </button>
-        </form>
-        
-        <!-- <div class="mdl-card__actions mdl-card--border">
+        <div class="mdl-card__actions mdl-card--border">
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="loginGoogle">
             Login with Google
           </a>
-      </div> -->
-      <!-- </div> -->
+      </div>
+      </div>
     </modal>
 </div>
   
 </template>
 
 <script>
+import firebase from 'firebase'
 import { mapActions } from 'vuex'
 export default {
   name: 'TheNavBar',
@@ -93,29 +79,30 @@ export default {
     login: function () {
       console.log('hello')
       this.createUser(this.formLogin)
+    },
+    loginGoogle: function () {
+      console.log('hello')
+      let provider1 = new firebase.auth.GoogleAuthProvider()
+      provider1.addScope('https://www.googleapis.com/auth/contacts.readonly')
+      provider1.addScope('profile')
+      provider1.addScope('email')
+      this.auth(provider1)
+    },
+    auth: function (provider) {
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          console.log('token: ', result.user.photoURL)
+          let user = result.user
+          this.formLogin.email = user.email
+          this.formLogin.username = user.displayName
+          this.formLogin.photo = user.photoURL
+          this.formLogin.uid = user.uid
+          console.log('user: ', result.user)
+          console.log(this.formLogin)
+          this.createUser(this.formLogin)
+        })
+        .catch(err => alert(err.message))
     }
-    // loginGoogle: function () {
-    //   console.log('hello')
-    //   let provider1 = new firebase.auth.GoogleAuthProvider()
-    //   provider1.addScope('https://www.googleapis.com/auth/contacts.readonly')
-    //   provider1.addScope('profile')
-    //   provider1.addScope('email')
-    //   this.auth(provider1)
-    // },
-    // auth: function (provider) {
-    //   firebase.auth().signInWithPopup(provider)
-    //     .then((result) => {
-    //       console.log('token: ', result.user.photoURL)
-    //       let user = result.user
-    //       this.formLogin.email = user.email
-    //       this.formLogin.username = user.displayName
-    //       this.formLogin.photo = user.photoURL
-    //       this.formLogin.uid = user.uid
-    //       console.log('user: ', result.user)
-    //       console.log(this.formLogin)
-    //     })
-    //     .catch(err => alert(err.message))
-    // }
   }
 }
 </script>

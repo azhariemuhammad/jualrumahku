@@ -8,6 +8,13 @@ import '../node_modules/material-design-lite/material.min.js'
 import VModal from 'vue-js-modal'
 import store from './vuex/store'
 import ReadMore from 'vue-read-more'
+import * as VueGoogleMaps from 'vue2-google-maps'
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBvWE_sIwKbWkiuJQOf8gSk9qzpO96fhfY',
+    libraries: 'places'
+  }
+})
 
 Vue.use(ReadMore)
 Vue.use(VModal)
