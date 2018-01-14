@@ -1,17 +1,21 @@
 <template>
   <div>
     <div class="flex-container">
-      <div class="demo-card-wide mdl-card mdl-shadow--2dp flex-item">
+      <div v-for="(item, index) in houses"> 
+        <div class="demo-card-wide mdl-card mdl-shadow--2dp flex-item">
         <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">Welcome</h2>
+          <h2 class="mdl-card__title-text">grergsegse</h2>
         </div>
         <div class="mdl-card__supporting-text">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Mauris sagittis pellentesque lacus eleifend lacinia...
+           {{ item.title }}
+           {{ item.price }}
         </div>
         <div class="mdl-card__actions mdl-card--border">
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="edit(item)">
+            Edit
+          </a>
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            Get Started
+            Remove
           </a>
         </div>
         <div class="mdl-card__menu">
@@ -20,12 +24,13 @@
           </button>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'ListPost',
   data () {
@@ -36,7 +41,14 @@ export default {
       'houses'
     ])
   },
-  methods: {}
+  methods: {
+    ...mapActions([
+      'editPost'
+    ]),
+    edit: function (item) {
+      this.editPost(item)
+    }
+  }
 }
 </script>
 
@@ -64,7 +76,7 @@ export default {
   display: -webkit-flex;
   display: flex;
   
-  -webkit-flex-flow: row wrap;
+  -webkit-flex-flow: wrap;
   justify-content: space-around;
 }
 

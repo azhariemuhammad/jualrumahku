@@ -10,7 +10,8 @@ const http = axios.create({
 const state = {
   username: '',
   email: '',
-  houses: []
+  houses: [],
+  editItem: []
 }
 
 const mutations = {
@@ -23,6 +24,20 @@ const mutations = {
   },
   setData: function (state, payload) {
     state.houses = payload
+  },
+  setNewData: function (state, payload) {
+    state.houses.push(payload)
+  },
+  updateStateHouse: function (state, payload) {
+    console.log(payload)
+    state.houses.forEach((element, index) => {
+      if (element._id === payload._id) {
+        state.houses.splice(index, 1, payload)
+      }
+    })
+  },
+  setEdit: function (state, payload) {
+    state.editItem = payload
   }
 }
 
@@ -58,6 +73,24 @@ const actions = {
     })
       .then(({data}) => {
         console.log(data, 'darta tat')
+        commit('setNewData', data)
+      })
+      .catch(err => console.log(err))
+  },
+  editPost: ({commit}, payload) => {
+    commit('setEdit', payload)
+  },
+  updateHouse: ({commit}, payload) => {
+    console.log('payload, ', payload)
+    http.put(`houses/${payload.id}`, {
+      title: payload.title,
+      desc: payload.desc,
+      photoDenah: payload.downloadURL,
+      price: payload.price
+    })
+      .then(({data}) => {
+        console.log(data)
+        commit('updateStateHouse', data)
       })
       .catch(err => console.log(err))
   }

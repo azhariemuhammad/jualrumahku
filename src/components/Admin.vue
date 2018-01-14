@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1>Post</h1>
-      <form action="#" @submit.prevent="upload">
+    <div v-if="editItem.length === 0">
+      <h1>Post</h1>
+      <form action="#" @submit.prevent="submit">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" v-model="post.title" id="sample3">
         <label class="mdl-textfield__label" for="sample3">Title</label>
@@ -15,7 +16,26 @@
         <vue-editor v-model="post.desc"></vue-editor>
       <input type="submit">
     </form>
-  
+    </div>
+    
+    <div v-else>
+      <h1>Edit</h1>
+      <form action="#" @submit.prevent="submit(true)">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" v-model="editItem.title" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Title</label>
+      </div>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" v-model="editItem.price" type="text" id="sample2">
+        <label class="mdl-textfield__label" for="sample2">Price</label>
+      </div>
+      <input type="file" @change="onfileChange">
+        <label class="mdl-textfield__label" for="sample2">Description</label>
+        <vue-editor v-model="editItem.desc"></vue-editor>
+      <input type="submit">
+    </form>
+    </div>
+    
   <ListPost/>
   </div>
   
@@ -44,28 +64,55 @@ export default {
         image: '',
         downloadURL: ''
       },
-      htmlForEditor: null
+      htmlForEditor: null,
+      onUpdate: false
     }
   },
   computed: {
     ...mapState([
-      'houses'
+      'editItem'
     ])
   },
   methods: {
     ...mapActions([
-      'postHouse'
+      'postHouse',
+      'getDataHouses',
+      'updateHouse'
     ]),
     onfileChange: function (e) {
-      console.log('hello')
       var files = e.target.files || e.dataTransfer.files
       if (!files.length) {
         return
       }
       this.post.image = files[0]
     },
-    submit: function () {
-      this.upload()
+    submit: function (params) {
+      console.log('paramas ,', params)
+      if (params === true) {
+        console.log('masuk paraa')
+        this.onUpdate = true
+        this.upload()
+      } else {
+        this.upload()
+      }
+    },
+    control: function () {
+      console.log(this.onUpdate)
+      if (this.onUpdate) {
+        console.log('update')
+        let obj = {
+          id: this.editItem._id,
+          title: this.editItem.title,
+          price: this.editItem.price,
+          desc: this.editItem.desc,
+          downloadURL: this.post.downloadURL
+        }
+        this.updateHouse(obj)
+      } else {
+        console.log('new post')
+        this.postHouse(this.post)
+        this.post = {}
+      }
     },
     upload: function () {
       console.log(this.post.image)
@@ -73,6 +120,9 @@ export default {
       let storageRef = firebaseStorage.ref()
       let file = this.post.image
       let vm = this
+      if (!file) {
+        alert('Image Required')
+      }
       var uploadTask = storageRef.child(`houses/${fileName}.png`).put(file)
       uploadTask.on('state_changed', function (snapshot) {
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
@@ -90,10 +140,12 @@ export default {
       }, function () {
         console.log('success')
         vm.post.downloadURL = uploadTask.snapshot.downloadURL
-        vm.postHouse(vm.post)
-        vm.post = {}
+        vm.control()
       })
     }
+  },
+  created () {
+    this.getDataHouses()
   }
 }
 </script>
