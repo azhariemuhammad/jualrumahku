@@ -110,7 +110,7 @@ export default {
   name: 'Admin',
   data () {
     return {
-      center: {lat: 10.0, lng: 10.0},
+      center: {lat: 6.1751, lng: 106.8650},
       markers: [{
         position: {lat: 10.0, lng: 10.0}
       }],

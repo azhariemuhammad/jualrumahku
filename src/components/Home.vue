@@ -2,8 +2,25 @@
 <div>
 
     <h1>Popular</h1>
-    <div class="flex-container">
-    <div class="mdl-card" v-for="item in houses">
+    <div class="field has-addons">
+      <div class="control" id="control1">
+        <input class="input is-large" v-model="query" type="text" placeholder="Find a repository">
+      </div>
+        <div class="control" id="control2">
+          <a class="button  is-large is-info">        
+          <i class="material-icons" @click="search">search</i>
+        </a>
+        </div> 
+        <div class="control" id="control1">
+          <a class="button  is-large is-info">        
+            <i class="material-icons" @click="renew">autorenew</i>
+           </a>
+        </div>         
+        
+      
+    </div>
+    <div class="flex-container" v-if="filterHouse">
+    <div class="mdl-card" v-for="item in filterHouse">
       <div flex-item>
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">{{ item.title }}</h2>
@@ -32,20 +49,30 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'Home',
   data () {
-    return {}
+    return {
+      query: ''
+    }
   },
   computed: {
     ...mapState([
-      'houses'
+      'filterHouse'
     ])
   },
   methods: {
     ...mapActions([
-      'getDataHouses'
-    ])
+      'getDataHouses',
+      'filter'
+    ]),
+    search: function () {
+      this.filter(this.query)
+    },
+    renew: function () {
+      this.query = ''
+      this.filter(this.query)
+    }
   },
   created () {
-    if (this.houses.length === 0) {
+    if (this.filterHouse.length === 0) {
       this.getDataHouses()
     }
   }
@@ -53,6 +80,15 @@ export default {
 </script>
 
 <style scoped>
+
+#control1 {
+  margin-right: 20px;
+}
+
+.button.is-info {
+  line-height: 13px;
+  margin-top: -1px;
+}
 
 h1 {
   color: black;
@@ -67,6 +103,7 @@ h1 {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
+  flex-wrap: wrap;
   
   -webkit-flex-flow: wrap;
   justify-content: space-around;
@@ -82,5 +119,8 @@ h1 {
   color: white;
   font-weight: bold;
   font-size: 3em;
+}
+.mdl-card {
+  margin-top: 16px;
 }
 </style>

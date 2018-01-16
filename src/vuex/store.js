@@ -11,6 +11,7 @@ const state = {
   username: localStorage.getItem('username'),
   email: localStorage.getItem('email'),
   houses: [],
+  filterHouse: [],
   editItem: [],
   housesBaseUid: []
 }
@@ -29,6 +30,7 @@ const mutations = {
   },
   setData: function (state, payload) {
     state.houses = payload
+    state.filterHouse = payload
   },
   setNewData: function (state, payload) {
     state.houses.push(payload)
@@ -54,18 +56,22 @@ const mutations = {
       return x._id === payload._id
     })
     console.log(index)
+  },
+  filterHome: function (state, payload) {
+    state.filterHouse = state.houses.filter(item => {
+      return item.title.toLowerCase().includes(payload.toLowerCase()) ||
+      item.address.toLowerCase().includes(payload.toLowerCase())
+    })
   }
 }
 
 const actions = {
   createUser: ({commit}, payload) => {
-    console.log('payload user: ', payload)
     http.post('users', {
       email: payload.email,
       username: payload.username
     })
       .then(({data}) => {
-        console.log('data Create User: ', data)
         commit('saveUser', data.user)
       })
       .catch(err => console.log(err))
@@ -74,16 +80,13 @@ const actions = {
     commit('removeUser')
   },
   getDataHouses: ({commit}, payload) => {
-    console.log('eee')
     http.get('houses')
       .then(({data}) => {
-        console.log('house', data)
         commit('setData', data)
       })
       .catch(err => console.log(err))
   },
   postHouse: ({commit}, payload) => {
-    console.log('payload: ', payload)
     http.post('houses', {
       title: payload.title,
       userId: localStorage.getItem('uidRumah'),
@@ -95,7 +98,6 @@ const actions = {
       price: payload.price
     })
       .then(({data}) => {
-        console.log(data, 'darta tat')
         commit('setNewData', data)
       })
       .catch(err => console.log(err))
@@ -104,16 +106,13 @@ const actions = {
     commit('setEdit', payload)
   },
   deleteHouse: ({commit}, payload) => {
-    console.log(payload, 'payloaddelete')
     http.delete(`house/${payload._id}`)
       .then(({ data }) => {
-        console.log(data)
         commit('remove', data)
       })
       .catch(err => console.log(err))
   },
   updateHouse: ({commit}, payload) => {
-    console.log('payload, ', payload)
     http.put(`houses/${payload.id}`, {
       title: payload.title,
       desc: payload.desc,
@@ -124,19 +123,19 @@ const actions = {
       price: payload.price
     })
       .then(({data}) => {
-        console.log(data)
         commit('updateStateHouse', data)
       })
       .catch(err => console.log(err))
   },
   findHouseByUid: ({commit}, payload) => {
-    console.log('haaofoawefoi')
     http.get(`houses/user/${localStorage.getItem('uidRumah')}`)
       .then(({data}) => {
-        console.log('data house: ', data)
         commit('setDataBasedUid', data)
       })
       .catch(err => console.log(err))
+  },
+  filter: ({commit}, payload) => {
+    commit('filterHome', payload)
   }
 }
 

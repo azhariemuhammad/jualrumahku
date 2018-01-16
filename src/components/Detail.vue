@@ -12,7 +12,7 @@
           <p>Rp. {{ currency }}</p>
 
           <p>Developer: {{house[0].userId.username}}</p>
-          <p>Contact: {{house[0].userId.email}}</p>
+          <p v-if="house[0].userId.username">Contact: {{house[0].userId.email}}</p>
           <router-link :to="{name: 'Gmap', params: {house: house[0]}}"><a>Show in Map</a></router-link>
 
           <router-view/>
