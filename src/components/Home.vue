@@ -4,7 +4,7 @@
     <h1>Popular</h1>
     <div class="field has-addons">
       <div class="control" id="control1">
-        <input class="input is-large" v-model="query" type="text" placeholder="Find a repository">
+        <input class="input is-large" v-model="query" type="text" placeholder="Find a house">
       </div>
         <div class="control" id="control2">
           <a class="button  is-large is-info">        
