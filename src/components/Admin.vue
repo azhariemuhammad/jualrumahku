@@ -1,4 +1,5 @@
 <template>
+<main class="mdl-layout__content">
   <div class="content">
     <div v-if="editItem.length === 0">
       <h1>Post</h1>
@@ -32,7 +33,7 @@
             id="map"
             ref="address"
             classname="form-control"
-            placeholder="Start typing"
+            placeholder="Address"
             v-on:placechanged="getAddressData"
             country="id"
         >
@@ -87,17 +88,18 @@
       <input type="submit">
     </form>
     </div>
-    
+  
   <ListPost/>
   </div>
   
   
   
-
+</main>
 
 </template>
 
 <script>
+
 import VueGoogleAutocomplete from 'vue-google-autocomplete'
 import firebaseStorage from '../firebase.js'
 import ListPost from '@/components/ListPost'
@@ -110,7 +112,7 @@ export default {
   name: 'Admin',
   data () {
     return {
-      center: {lat: 6.1751, lng: 106.8650},
+      center: {lat: -6.142453100000002, lng: 106.66243129999998},
       markers: [{
         position: {lat: 10.0, lng: 10.0}
       }],
@@ -205,8 +207,12 @@ export default {
       let storageRef = firebaseStorage.ref()
       let file = this.post.image
       let vm = this
+      let type = typeof this.post.price
       if (!file) {
         alert('Image Required')
+      }
+      if (type !== Number) {
+        alert('Price must be a number')
       }
       var uploadTask = storageRef.child(`houses/${fileName}.png`).put(file)
       uploadTask.on('state_changed', function (snapshot) {

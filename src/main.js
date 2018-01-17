@@ -9,6 +9,9 @@ import VModal from 'vue-js-modal'
 import store from './vuex/store'
 import ReadMore from 'vue-read-more'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 
 Vue.prototype.$http = axios.create({
@@ -21,6 +24,8 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places'
   }
 })
+
+Vue.use(BootstrapVue)
 
 Vue.use(ReadMore)
 Vue.use(VModal)

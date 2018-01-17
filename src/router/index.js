@@ -8,6 +8,7 @@ import Gmap from '@/components/Gmap'
 Vue.use(Router)
 
 let router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -17,13 +18,19 @@ let router = new Router({
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: Admin,
+      beforeRouteEnter: (to, form, next) => {
+        if (localStorage.getItem('uidRumah')) {
+          next()
+        } else {
+          alert('Please Login!')
+        }
+      }
     },
     {
       path: '/detail/:id',
       name: 'Detail',
       component: Detail,
-      requiresAuth: true,
       props: true,
       children: [
         {
@@ -36,13 +43,13 @@ let router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  let currentUser = localStorage.getItem('uidRumah')
-  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+// router.beforeEach((to, from, next) => {
+//   let currentUser = localStorage.getItem('uidRumah')
+//   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  if (requiresAuth && !currentUser) next('/')
-  else if (!requiresAuth && currentUser) next('/')
-  else next()
-})
+//   if (requiresAuth && !currentUser) next('/')
+//   else if (!requiresAuth && currentUser) next('/')
+//   else next()
+// })
 
 export default router

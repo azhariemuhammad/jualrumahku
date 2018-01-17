@@ -1,18 +1,50 @@
 <template>
 <div>
-    
-      <header class="mdl-layout__header">
-        <div class="mdl-layout__header-row">
+    <b-navbar toggleable="md" type="dark" variant="info">
+
+  <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+  <router-link :to="{path: '/'}"><b-navbar-brand>Jual-Rumahku</b-navbar-brand></router-link>
+
+  <b-collapse is-nav id="nav_collapse">
+
+    <b-navbar-nav>
+      <!-- <b-nav-item> -->
+        <router-link :to="{path: '/admin'}">
+        <a class="mdl-navigation__link">Admin</a>
+        </router-link>
+        <!-- </b-nav-item> -->
+    </b-navbar-nav>
+
+    <!-- Right aligned nav items -->
+    <b-navbar-nav class="ml-auto">
+        <button class="mdl-button mdl-js-button mdl-button--raised" @click="show">
+          Account
+        </button>
+      <!-- <b-nav-item-dropdown right> -->
+        <!-- Using button-content slot -->
+        <!-- <template slot="button-content">
+          <em>User</em>
+        </template>
+        <b-dropdown-item href="#">Profile</b-dropdown-item>
+        <b-dropdown-item href="#">Signout</b-dropdown-item>
+      </b-nav-item-dropdown> -->
+    </b-navbar-nav>
+
+  </b-collapse>
+</b-navbar>
+
+      <!-- <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row"> -->
           <!-- Title -->
-          <router-link :to="{path: '/'}">
+          <!-- <router-link :to="{path: '/'}">
           <span class="mdl-layout-title">Jual-Rumahku</span>
-          </router-link>
+          </router-link> -->
           <!-- Add spacer, to align navigation to the right -->
-          <div class="mdl-layout-spacer"></div>
+          <!-- <div class="mdl-layout-spacer"></div> -->
           <!-- Navigation. We hide it in small screens. -->
-          <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <router-link :to="{path: '/admin'}"><a class="mdl-navigation__link" href="">Admin</a>
-            </router-link>
+          <!-- <nav class="mdl-navigation mdl-layout--large-screen-only">
+            
             <a class="mdl-navigation__link" href="">Link</a>
             <a class="mdl-navigation__link" href="">Link</a>
             <button class="mdl-button mdl-js-button mdl-button--raised" @click="show">
@@ -29,7 +61,7 @@
           <a class="mdl-navigation__link" href="">Link</a>
           <a class="mdl-navigation__link" href="">Link</a>
         </nav>
-      </div>
+      </div> -->
 
     <modal name="hello-world">
       <div id="card-modal">
@@ -114,6 +146,7 @@ export default {
         vm.isLogin = ''
         vm.signout()
         vm.hide()
+        vm.$router.push('/')
         alert('logout')
       }).catch(function (error) {
         // An error happened.

@@ -1,30 +1,29 @@
 <template>
   <div>
     <div class="flex-container">
-      <div v-for="(item, index) in housesBaseUid"> 
-        <div class="demo-card-wide mdl-card mdl-shadow--2dp flex-item">
-        <div class="mdl-card__title">
-          <h2 class="mdl-card__title-text">grergsegse</h2>
-        </div>
-        <div class="mdl-card__supporting-text">
-           {{ item.title }}
-           {{ item.price }}
-        </div>
-        <div class="mdl-card__actions mdl-card--border">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="edit(item)">
-            Edit
-          </a>
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="remove(item)">
-            Remove
-          </a>
-        </div>
-        <div class="mdl-card__menu">
-          <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-            <i class="material-icons">share</i>
-          </button>
-        </div>
-      </div>
-      </div>
+          <div v-for="(item, index) in housesBaseUid"> 
+            <div class="demo-card-wide mdl-card mdl-shadow--2dp flex-item">
+            <div class="mdl-card__title">
+            </div>
+            <div class="mdl-card__supporting-text">
+              {{ item.title }}
+              {{ item.price }}
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="edit(item)">
+                Edit
+              </a>
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" @click="remove(item)">
+                Remove
+              </a>
+            </div>
+            <div class="mdl-card__menu">
+              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <i class="material-icons">share</i>
+              </button>
+            </div>
+          </div>
+          </div>
     </div>
   </div>
 </template>
@@ -67,11 +66,15 @@ export default {
   width: 512px;
 }
 .demo-card-wide > .mdl-card__title {
-  color: #fff;
+  color:#787878;
   height: 176px;
 }
 .demo-card-wide > .mdl-card__menu {
   color: #fff;
+}
+
+.mdl-button {
+  color: #db2b3d !important; 
 }
 
 
@@ -85,7 +88,7 @@ export default {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
-  
+  flex-wrap: wrap;
   -webkit-flex-flow: wrap;
   justify-content: space-around;
 }

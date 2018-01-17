@@ -15,10 +15,9 @@
           <a class="button  is-large is-info">        
             <i class="material-icons" @click="renew">autorenew</i>
            </a>
-        </div>         
-        
-      
+        </div>               
     </div>
+    
     <div class="flex-container" v-if="filterHouse">
     <div class="mdl-card" v-for="item in filterHouse">
       <div flex-item>
